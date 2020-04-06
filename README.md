@@ -68,7 +68,9 @@ chmod u=rwx ,ddg
 
 ### Convert Currency
 
-Compare exchange rates between a provided currency and Euro (default), or between two provided currencies. Uses the [ECB SDMX 2.1 RESTful web service API](https://sdw-wsrest.ecb.europa.eu/)
+Compare exchange rates between a provided currency and Euro (default), or between two provided currencies. Uses the [ECB SDMX 2.1 RESTful web service API](https://sdw-wsrest.ecb.europa.eu/).
+
+Currencies are provided as arguments, formatted in the SP00/ISO 4217 currency reference rate code format (key supplied).
 
 - Requires [xpath](https://manpages.ubuntu.com/manpages/precise/en/man1/xpath.1p.html) be installed in your environment.
 - Requires that the `convert-currency-supported-currencies` file be kept in the same directory for printing error and supported currency code messages.
@@ -76,20 +78,22 @@ Compare exchange rates between a provided currency and Euro (default), or betwee
 Example 1:
 
 ```bash
-$ ,convert-curreny ZAR
+,convert-currency ZAR
 20.3534 ZAR in 1 EUR
 ```
 
 Example 2:
 
 ```bash
-$ ,convert-curreny ZAR GBP
+,convert-currency ZAR GBP
 23.1815 ZAR in 1.00 GBP
 ```
 
 ### Search With Duck Duck Go
 
-Opens your defualt browser showing results from [Duck Duck Go](https://duckduckgo.com/) search query containing all provided search terms.
+Get results from the [Duck Duck Go](https://duckduckgo.com/) search engine for queries in your default browser using terms.
+
+Search terms are provided as arguments.
 
 Example:
 
@@ -102,3 +106,15 @@ Example:
 Get the weather for your location or any cities using Igor Chubin's [wttr.in](https://github.com/chubin/wttr.in) service.
 
 If no argument is supplied, your current location is used. Supplying city as an argument will return the weather for that city.
+
+Example 1:
+
+```bash
+,wttr
+```
+
+Example 2:
+
+```bash
+,wttr helsinki
+```
