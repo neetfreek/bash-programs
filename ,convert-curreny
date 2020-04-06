@@ -1,0 +1,105 @@
+#!/bin/bash
+
+###############################################################################
+# Currenct converter program using the ECB SDMX 2.1 RESTful web service API   #
+# https://sdw-wsrest.ecb.europa.eu/                                           #
+#                                                                    <(^^ )>  #
+###############################################################################
+# Prints exchange rate between argument currency to EUR if one argument       #
+#   supplied.                                                                 #
+# Prints exchange rate between two currencies ($1 being "from", $2 being      #
+#   "to")                                                                     #
+#   if more than one currency supplied, ignoring 3rd, onwards.                #
+# ECB data provides rates only as recent as two days ago, so conversion uses  #
+#   system time minus two days.                                               #
+#                                                                             #
+# Depends on xpath being installed locally. Prompts user to install if        #
+#   it's missing.                                                             #
+###############################################################################
+
+
+# Dependency vars
+DENPENDENCY_XPATH_PRESENT="0"
+DEPENDENCY_XPATH_PACKAGE="libxml-xpath-perl"
+
+# File name vars
+NAME_FILE_CURRENCY_RESPONSE="currency-response-data.xml"
+NAME_FILE_CURRENCIES_SUPPORTED="convert-currency-supported-currencies"
+
+# Calculation vars
+QUERY_DATE=$(date +"%Y-%m-%d")
+FROM_CURRENCY=""
+FROM_RATE=""
+TO_CURRENCY=""
+TO_VALUE_RATE=""
+
+# User message, terminate program
+error_message() {
+  cat $NAME_FILE_CURRENCIES_SUPPORTED
+  exit 1
+}
+
+# Check xpath dependency installed, ask user to install if not, terminate
+DENPENDENCY_XPATH_PRESENT=$(dpkg-query -W -f='${Status}' $DEPENDENCY_XPATH_PACKAGE 2>/dev/null | grep -c "ok installed")
+if [ $DENPENDENCY_XPATH_PRESENT -eq 0 ]
+  then
+    echo "Missing dependency xpath. Please install it by executing:
+sudo apt install $DEPENDENCY_XPATH_PACKAGE"
+  exit 1
+  fi
+
+# Message if no argument, terminate
+if [ $# -eq 0 ]
+  then
+    error_message
+    exit 1
+fi
+
+## Get TO_CURRENCY currency rate against EUR
+if [ -z "$2" ]
+  then
+    TO_CURRENCY=$1
+
+    curl -s -k -o $NAME_FILE_CURRENCY_RESPONSE\
+    --header "Accept:application/vnd.sdmx.structurespecificdata+xml;version=2.1" \
+    https://sdw-wsrest.ecb.europa.eu/service/data/EXR/D.$TO_CURRENCY.EUR.SP00.A?startPeriod=$QUERY_DATE
+
+    TO_RATE=$(xpath -e 'string(//Obs/@OBS_VALUE)' $NAME_FILE_CURRENCY_RESPONSE 2>/dev/null)
+    rm $NAME_FILE_CURRENCY_RESPONSE
+
+    if [ -z "$TO_RATE" ]
+      then
+        error_message
+        exit 1
+    fi
+
+    echo "$TO_RATE $TO_CURRENCY in 1 EUR"
+
+## Get FROM_CURRENCY currency rate against TO_CURRENCY
+else
+    FROM_CURRENCY=$1
+    TO_CURRENCY=$2
+
+    curl -s -k -o $NAME_FILE_CURRENCY_RESPONSE\
+    --header "Accept:application/vnd.sdmx.structurespecificdata+xml;version=2.1" \
+    https://sdw-wsrest.ecb.europa.eu/service/data/EXR/D.$FROM_CURRENCY.EUR.SP00.A?startPeriod=$QUERY_DATE
+
+    FROM_RATE=$(xpath -e 'string(//Obs/@OBS_VALUE)' $NAME_FILE_CURRENCY_RESPONSE 2>/dev/null)
+    rm $NAME_FILE_CURRENCY_RESPONSE
+
+    curl -s -k -o $NAME_FILE_CURRENCY_RESPONSE\
+    --header "Accept:application/vnd.sdmx.structurespecificdata+xml;version=2.1" \
+    https://sdw-wsrest.ecb.europa.eu/service/data/EXR/D.$TO_CURRENCY.EUR.SP00.A?startPeriod=$QUERY_DATE
+
+    TO_RATE=$(xpath -e 'string(//Obs/@OBS_VALUE)' $NAME_FILE_CURRENCY_RESPONSE 2>/dev/null)
+    rm $NAME_FILE_CURRENCY_RESPONSE
+
+    if [[ -z "$TO_RATE" || -z "$FROM_RATE" ]];
+      then
+        error_message
+        exit 1
+    fi
+
+    EXCHANGE_RATE=$(echo "scale=4 ; $FROM_RATE / $TO_RATE" | bc)
+    echo "$EXCHANGE_RATE $FROM_CURRENCY in 1.00 $TO_CURRENCY"
+fi

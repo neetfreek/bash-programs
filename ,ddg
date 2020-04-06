@@ -1,0 +1,10 @@
+#!/bin/bash
+
+###############################################################################
+# Open your default browser with a DDG search for all search terms provided   #
+#                                                                    <(^^ )>  #
+###############################################################################
+
+  TERM=""
+  for i; do TERM="${TERM}+$i"; done
+  xdg-open "https://www.duckduckgo.com/?q=$TERM"

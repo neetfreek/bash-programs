@@ -1,0 +1,46 @@
+The following is a listing of all supported currencies, followed by their currency reference rate codes in SP00/ISO 4217 format:
+
+CURRENCY                SP00/ISO 4217 CURRENCY CODE
+
+Algerian dinar,         DZD
+Argentine peso,         ARS
+Australian dollar,      AUD
+Brazilian real,         BRL
+Bulgarian lev,          BGN
+Canadian dollar,        CAD
+Chinese yuan renminbi,  CNY
+Croatian kuna,          HRK
+Czech koruna,           CZK
+Danish krone,           DKK
+Euro,                   EUR
+Hong Kong dollar        HKD
+Hungarian forint        HUF
+Iceland krona           ISK
+Indian rupee            INR
+Indonesian rupiah,      IDR
+Israeli shekel,         ILS
+Japanese yen,           JPY
+Korean won (Republic),  KRW
+Malaysian ringgit,      MYR
+Mexican peso,           MXN
+Moroccan dirham,        MAD
+New Taiwan dollar,      TWD
+New Zealand dollar,     NZD
+Norwegian krone,        NOK
+Philippine peso,        PHP
+Polish zloty,           PLN
+Romanian leu,           RON
+Russian rouble,         RUB
+Singapore dollar,       SGD
+South African rand,     ZAR
+Swedish krona,          SEK
+Swiss franc,            CHF
+Thai baht,              THB
+Turkish lira,           TRY
+UK pound sterling,      GBP
+US dollar,              USD
+
+Supply one currency name code argument for FORM EUR TO [arugment]
+or two codes for FROM [argument 1] TO [argument 2]
+
+See above for currency reference rate codes in SP00/ISO 4217 format)
