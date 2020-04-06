@@ -9,8 +9,7 @@ All names begin with a `,` to make finding them more convenient and prevent nami
 - [Setup](##-setup)
 - [Convert Currency](###convert-currency)
 - [Search with Duck Duck Go](###-search-with-duck-duck-go)
-- [Weather With wttr.in](###-weather-with-wttr.in)
-
+- [Get the Weather with wttr](###-get-the-weather-with-wttr)
 
 ## Setup
 
@@ -97,3 +96,9 @@ Example:
 ```bash
 ,ddg sights cape town
 ```
+
+### Get the Weather with wttr
+
+Get the weather for your location or any cities using Igor Chubin's [wttr.in](https://github.com/chubin/wttr.in) service.
+
+If no argument is supplied, your current location is used. Supplying city as an argument will return the weather for that city.

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+###############################################################################
+# Get the weather in your terminal using wttr.in's API                        #
+# (https://github.com/chubin/wttr.in)                                         #
+#                                                                    <(^^ )>  #
+###############################################################################
+# If no arguments are supplied, shows the weather at your current location.   #
+# If one or cities are passed as arguments, shows the weather for the first   #
+#   argument provided.                                                        #
+###############################################################################
+
+curl wttr.in/$1
