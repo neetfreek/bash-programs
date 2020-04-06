@@ -4,6 +4,8 @@
 # Open your default browser with a DDG search for all search terms provided   #
 #                                                                    <(^^ )>  #
 ###############################################################################
+# Each argument passed to the command is used as a search term.               #
+###############################################################################
 
   TERM=""
   for i; do TERM="${TERM}+$i"; done
