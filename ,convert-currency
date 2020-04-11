@@ -27,7 +27,9 @@ NAME_FILE_CURRENCY_RESPONSE="currency-response-data.xml"
 NAME_FILE_CURRENCIES_SUPPORTED="convert-currency-supported-currencies"
 
 # Calculation vars
-QUERY_DATE=$(date +"%Y-%m-%d")
+DATE_NOW=$(date +"%Y-%m-%d")
+TWO=2
+QUERY_DATE=""
 FROM_CURRENCY=""
 FROM_RATE=""
 TO_CURRENCY=""
@@ -38,6 +40,8 @@ error_message() {
   cat $NAME_FILE_CURRENCIES_SUPPORTED
   exit 1
 }
+
+QUERY_DATE=`date -d "$DATE_NOW - $TWO days" +%Y-%m-%d`
 
 # Check xpath dependency installed, ask user to install if not, terminate
 DENPENDENCY_XPATH_PRESENT=$(dpkg-query -W -f='${Status}' $DEPENDENCY_XPATH_PACKAGE 2>/dev/null | grep -c "ok installed")
@@ -59,7 +63,6 @@ fi
 if [ -z "$2" ]
   then
     TO_CURRENCY=$1
-
     curl -s -k -o $NAME_FILE_CURRENCY_RESPONSE\
     --header "Accept:application/vnd.sdmx.structurespecificdata+xml;version=2.1" \
     https://sdw-wsrest.ecb.europa.eu/service/data/EXR/D.$TO_CURRENCY.EUR.SP00.A?startPeriod=$QUERY_DATE
